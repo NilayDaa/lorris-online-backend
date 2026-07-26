@@ -1,0 +1,73 @@
+.playing-card{
+
+    width:70px;
+
+    height:100px;
+
+    margin:6px;
+
+    border-radius:10px;
+
+    border:2px solid #222;
+
+    background:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.playing-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 6px 12px rgba(0,0,0,.25);
+
+}
+
+.playing-card.red{
+
+    color:#d62828;
+
+}
+
+.playing-card.black{
+
+    color:#111;
+
+}
+
+.rank{
+
+    margin-top:8px;
+
+}
+
+.suit{
+
+    font-size:32px;
+
+    margin-bottom:8px;
+
+}
+
+.playing-card:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}

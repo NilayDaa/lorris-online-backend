@@ -1,0 +1,95 @@
+.trick-table{
+
+    position:relative;
+
+    width:420px;
+
+    height:420px;
+
+    margin:auto;
+
+}
+
+.played-card{
+
+    position:absolute;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+.played-card small{
+
+    color:white;
+
+    margin-bottom:6px;
+
+}
+
+/* Left */
+
+.seat-0{
+
+    left:10px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+}
+
+/* Top Left */
+
+.seat-1{
+
+    left:110px;
+
+    top:20px;
+
+}
+
+/* Top Right */
+
+.seat-2{
+
+    right:110px;
+
+    top:20px;
+
+}
+
+/* Right */
+
+.seat-3{
+
+    right:10px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+}
+
+/* Bottom Left */
+
+.seat-4{
+
+    left:110px;
+
+    bottom:20px;
+
+}
+
+/* Bottom Right */
+
+.seat-5{
+
+    right:110px;
+
+    bottom:20px;
+
+}

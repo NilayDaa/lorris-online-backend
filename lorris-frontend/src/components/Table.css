@@ -1,0 +1,21 @@
+.game-table{
+
+    width:min(1400px,98vw);
+
+    height:min(900px,98vh);
+
+    background:#0c6b39;
+
+    border-radius:20px;
+
+    border:6px solid #5b3a29;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:15px;
+
+    overflow:hidden;
+
+}
