@@ -5,7 +5,9 @@ let stompClient = null;
 
 export function connect(gameId, onGameUpdate) {
 
-    const socket = new SockJS("http://localhost:8080/ws");
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const socket = new SockJS(`${apiUrl}/ws`);
 
     stompClient = new Client({
         webSocketFactory: () => socket,
