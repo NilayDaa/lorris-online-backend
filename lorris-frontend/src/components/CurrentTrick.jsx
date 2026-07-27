@@ -11,9 +11,23 @@ export default function CurrentTrick({ game }) {
 
     }
 
-    const entries = Object.entries(
-        trick.playedCards || {}
-    );
+    function seatClass(playerName) {
+
+        if (playerName === game.players[1]?.name) return "top";
+
+        if (playerName === game.players[0]?.name) return "left";
+
+        if (playerName === game.players[2]?.name) return "right";
+
+        if (playerName === game.players[3]?.name) return "bottom-right";
+
+        if (playerName === game.players[4]?.name) return "bottom";
+
+        if (playerName === game.players[5]?.name) return "bottom-left";
+
+        return "";
+
+    }
 
     return (
 
@@ -21,29 +35,31 @@ export default function CurrentTrick({ game }) {
 
             {
 
-                entries.map(([player, card], index) => (
+                Object.entries(trick.playedCards || {}).map(
 
-                    <div
+                    ([playerName, card]) => (
 
-                        key={player}
+                        <div
 
-                        className={`played-card seat-${index}`}
+                            key={playerName}
 
-                    >
+                            className={`played-card ${seatClass(playerName)}`}
 
-                        <small>{player}</small>
+                        >
 
-                        <Card
+                            <Card
 
-                            card={card}
+                                card={card}
 
-                            disabled={true}
+                                disabled={true}
 
-                        />
+                            />
 
-                    </div>
+                        </div>
 
-                ))
+                    )
+
+                )
 
             }
 

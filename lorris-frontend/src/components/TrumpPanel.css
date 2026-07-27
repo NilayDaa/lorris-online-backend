@@ -1,0 +1,212 @@
+.trump-page{
+
+    min-height:100dvh;
+
+    background:#0f6b38;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:12px;
+
+    box-sizing:border-box;
+
+}
+
+
+.trump-card{
+
+    width:min(430px,100%);
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-sizing:border-box;
+
+    text-align:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+}
+
+
+.trump-card h1{
+
+    margin:5px;
+
+    color:#14532d;
+
+}
+
+
+.declarer-box{
+
+    background:#f1f5f9;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    margin:15px 0;
+
+}
+
+
+.declarer-box strong{
+
+    display:block;
+
+    margin-top:5px;
+
+    color:#14532d;
+
+}
+
+
+
+.suit-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+}
+
+
+
+.suit-grid button{
+
+    height:75px;
+
+    border:none;
+
+    border-radius:15px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    color:white;
+
+}
+
+
+
+.suit-grid span{
+
+    display:block;
+
+    font-size:32px;
+
+}
+
+
+
+.Hearts{
+
+    background:#dc2626;
+
+}
+
+
+
+.Diamonds{
+
+    background:#ea580c;
+
+}
+
+
+
+.Clubs{
+
+    background:#14532d;
+
+}
+
+
+
+.Spades{
+
+    background:#1e3a8a;
+
+}
+
+
+
+.waiting-box{
+
+    background:#f1f5f9;
+
+    padding:20px;
+
+    border-radius:12px;
+
+}
+
+
+
+.my-hand{
+
+    margin-top:20px;
+
+    border-top:1px solid #ddd;
+
+    padding-top:10px;
+
+}
+
+
+
+.hand-row{
+
+    display:flex;
+
+    gap:6px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+}
+
+
+
+.hand-row::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+
+
+@media(max-width:480px){
+
+
+    .trump-card{
+
+        padding:14px;
+
+    }
+
+
+    .suit-grid button{
+
+        height:65px;
+
+        font-size:16px;
+
+    }
+
+
+}

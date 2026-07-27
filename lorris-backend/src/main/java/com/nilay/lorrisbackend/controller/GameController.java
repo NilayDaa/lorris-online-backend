@@ -235,6 +235,17 @@ public class GameController {
 
     }
 
+    @PostMapping("/{gameId}/next-round")
+        public Game nextRound(
+
+                @PathVariable String gameId
+
+        ){
+
+        return gameService.nextRound(gameId);
+
+        }
+
 
 
 }

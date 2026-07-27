@@ -1,44 +1,66 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     createGame,
     joinGame
-}
-from "../api/gameApi";
+} from "../api/gameApi";
+
+import "./Home.css";
 
 
 export default function Home(){
 
-
-    const navigate =
-        useNavigate();
+    const navigate = useNavigate();
 
 
-    const [name,setName]=useState("");
+    const [createName,setCreateName] = useState("");
 
-    const [gameId,setGameId]=useState("");
+    const [joinName,setJoinName] = useState("");
 
+    const [gameId,setGameId] = useState("");
+
+    const [loading,setLoading] = useState(false);
 
 
 
     async function handleCreate(){
 
 
+        if(!createName.trim()){
+
+            alert("Enter your name");
+
+            return;
+
+        }
+
+
         try{
 
+            setLoading(true);
+
+
+            // create game
 
             const game =
                 await createGame();
 
 
 
+            // join as creator
+
             await joinGame(
                 game.gameId,
-                name
+                createName
             );
-            
-            localStorage.setItem("playerName", name);
+
+
+
+            localStorage.setItem(
+                "playerName",
+                createName
+            );
+
 
 
             navigate(
@@ -47,14 +69,24 @@ export default function Home(){
 
 
         }
+
         catch(error){
 
-            console.log(error);
+            console.error(error);
+
+            alert(
+                "Failed to create game"
+            );
+
+        }
+
+        finally{
+
+            setLoading(false);
 
         }
 
     }
-
 
 
 
@@ -62,110 +94,200 @@ export default function Home(){
     async function handleJoin(){
 
 
+        if(
+            !joinName.trim() ||
+            !gameId.trim()
+        ){
+
+            alert(
+                "Enter name and game ID"
+            );
+
+            return;
+
+        }
+
+
+
         try{
 
 
-            await joinGame(
-                gameId,
-                name
-            );
+            setLoading(true);
 
-            localStorage.setItem("playerName", name);
+
+
+            const game =
+
+                await joinGame(
+                    gameId,
+                    joinName
+                );
+
+
+
+            localStorage.setItem(
+                "playerName",
+                joinName
+            );
 
 
 
             navigate(
-                `/lobby/${gameId}`
+                `/lobby/${game.gameId}`
             );
 
 
         }
+
         catch(error){
 
-            console.log(error);
+            console.error(error);
+
+            alert(
+                "Failed to join game"
+            );
 
         }
 
+        finally{
+
+            setLoading(false);
+
+        }
 
     }
 
 
 
 
+    return (
 
-return (
-
-<div>
-
-
-<h1>
-Lorris Online
-</h1>
+        <div className="home-page">
 
 
-<h2>Create Game</h2>
+            <div className="home-card">
 
 
-<input
-
-placeholder="Your name"
-
-value={name}
-
-onChange={
-e=>setName(e.target.value)
-}
-
-/>
+                <div className="logo">
+                    🃏
+                </div>
 
 
-<button
-onClick={handleCreate}
->
+                <h1>
+                    Lorris Online
+                </h1>
 
-Create Game
 
-</button>
+                <p className="subtitle">
+                    3 vs 3 Trick Taking Game
+                </p>
 
 
 
-<hr/>
+                <h3>
+                    Create Game
+                </h3>
 
 
-<h2>
-Join Game
-</h2>
+                <input
+
+                    placeholder="Your name"
+
+                    value={createName}
+
+                    onChange={
+                        e=>
+                        setCreateName(
+                            e.target.value
+                        )
+                    }
+
+                />
 
 
+                <button
 
-<input
+                    className="create-btn"
 
-placeholder="Game ID"
+                    onClick={handleCreate}
 
-value={gameId}
+                    disabled={loading}
 
-onChange={
-e=>setGameId(e.target.value)
-}
+                >
 
-/>
+                    🎮 Create Game
 
-
-
-<button
-onClick={handleJoin}
->
-
-Join
-
-</button>
+                </button>
 
 
 
 
-</div>
+                <div className="divider">
+                    OR
+                </div>
 
-);
 
+
+
+                <h3>
+                    Join Game
+                </h3>
+
+
+                <input
+
+                    placeholder="Your name"
+
+                    value={joinName}
+
+                    onChange={
+                        e=>
+                        setJoinName(
+                            e.target.value
+                        )
+                    }
+
+                />
+
+
+                <input
+
+                    placeholder="Game ID"
+
+                    value={gameId}
+
+                    onChange={
+                        e=>
+                        setGameId(
+                            e.target.value
+                        )
+                    }
+
+                />
+
+
+
+                <button
+
+                    className="join-btn"
+
+                    onClick={handleJoin}
+
+                    disabled={loading}
+
+                >
+
+                    🚀 Join Game
+
+                </button>
+
+
+
+            </div>
+
+
+        </div>
+
+    );
 
 }

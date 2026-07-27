@@ -1,13 +1,14 @@
 .playing-card{
 
-    width:70px;
-    height:100px;
+    width:48px;
+
+    height:32px;
 
     background:white;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    border:2px solid #333;
+    border:1px solid #333;
 
     display:flex;
 
@@ -26,6 +27,8 @@
     font-weight:bold;
 
     user-select:none;
+
+    margin-right:-18px;
 
 }
 
@@ -51,12 +54,12 @@
 
 .card-suit{
 
-    font-size:28px;
+    font-size:18px;
 
 }
 
 .card-rank{
 
-    font-size:18px;
+    font-size:13px;
 
 }

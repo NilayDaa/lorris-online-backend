@@ -1,0 +1,187 @@
+.home-page{
+
+    min-height:100dvh;
+
+    background:#0f6b38;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+}
+
+
+.home-card{
+
+    width:min(420px,100%);
+
+    background:white;
+
+    border-radius:25px;
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    box-shadow:
+
+    0 15px 40px rgba(0,0,0,.35);
+
+}
+
+
+.logo{
+
+    font-size:70px;
+
+}
+
+
+
+.home-card h1{
+
+    margin:5px;
+
+    color:#14532d;
+
+    font-size:32px;
+
+}
+
+
+
+.subtitle{
+
+    color:#666;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.home-card input{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    border:2px solid #ddd;
+
+    font-size:16px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.home-card input:focus{
+
+    outline:none;
+
+    border-color:#15803d;
+
+}
+
+
+
+.home-card button{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:14px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+.create-btn{
+
+    background:#15803d;
+
+}
+
+
+
+.create-btn:hover{
+
+    background:#166534;
+
+}
+
+
+
+.join-btn{
+
+    background:#1d4ed8;
+
+}
+
+
+
+.join-btn:hover{
+
+    background:#1e40af;
+
+}
+
+
+
+.divider{
+
+    margin:15px;
+
+    color:#888;
+
+    font-weight:bold;
+
+}
+
+
+
+@media(max-width:480px){
+
+    .home-card{
+
+        padding:25px 15px;
+
+    }
+
+
+    .logo{
+
+        font-size:55px;
+
+    }
+
+
+    .home-card h1{
+
+        font-size:26px;
+
+    }
+
+}

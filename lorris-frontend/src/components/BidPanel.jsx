@@ -1,85 +1,201 @@
+import Card from "./Card";
+import "./BidPanel.css";
+
 export default function BidPanel({
 
     game,
 
     playerName,
 
+    hand,
+
     onBid
 
 }) {
+
 
     const yourTurn =
         game.players[
             game.currentBidderIndex
         ]?.name === playerName;
 
+
     return (
 
-        <div>
+        <div className="bid-page">
 
-            <h2>
 
-                Highest Bid
+            <div className="bid-card">
 
-            </h2>
 
-            <h1>
+                <h1>
 
-                {game.highestBid}
+                    🎯 Place Your Bid
 
-            </h1>
+                </h1>
 
-            {
+
+
+                <div className="bid-info">
+
+
+                    <span>
+
+                        Highest Bid
+
+                    </span>
+
+
+                    <strong>
+
+                        {game.highestBid}
+
+                    </strong>
+
+
+                </div>
+
+
+
+                {
 
                 yourTurn ?
 
+
                 <>
 
-                    <h3>
 
-                        Your Turn
+                    <div className="turn-box">
 
-                    </h3>
+                        ✅ Your Turn
+
+                    </div>
+
+
+
+                    <div className="bid-grid">
+
 
                     {
 
-                        [0,1,2,3,4,5,6,7,8].map(bid => (
+                    [0,1,2,3,4,5,6,7,8]
 
-                            <button
+                    .map(bid=>(
 
-                                key={bid}
 
-                                onClick={() => onBid(bid)}
+                        <button
 
-                            >
+                            key={bid}
 
-                                {bid === 0 ? "Pass" : bid}
+                            className={
+                                bid===0
+                                ?"pass"
+                                :"bid"
+                            }
 
-                            </button>
+                            onClick={()=>onBid(bid)}
 
-                        ))
+                        >
+
+                            {
+
+                            bid===0
+
+                            ?
+
+                            "PASS"
+
+                            :
+
+                            bid
+
+                            }
+
+
+                        </button>
+
+
+                    ))
 
                     }
+
+
+                    </div>
+
 
                 </>
 
+
                 :
 
-                <h3>
 
-                    Waiting for
+                <div className="waiting-box">
+
+                    ⏳ Waiting for
+
+                    <strong>
 
                     {
 
-                        game.players[
-                            game.currentBidderIndex
-                        ]?.name
+                    game.players[
+                        game.currentBidderIndex
+                    ]?.name
 
                     }
 
-                </h3>
+                    </strong>
 
-            }
+                </div>
+
+
+                }
+
+
+
+
+                <div className="my-hand">
+
+
+                    <h3>
+
+                        Your Hand
+
+                    </h3>
+
+
+                    <div className="hand-row">
+
+
+                    {
+
+                    hand.map((card,index)=>(
+
+
+                        <Card
+
+                            key={index}
+
+                            card={card}
+
+                            disabled={true}
+
+                        />
+
+
+                    ))
+
+                    }
+
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
 
         </div>
 

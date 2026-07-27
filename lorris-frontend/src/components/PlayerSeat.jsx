@@ -1,3 +1,5 @@
+import "./PlayerSeat.css";
+
 export default function PlayerSeat({
 
     player,
@@ -16,87 +18,33 @@ export default function PlayerSeat({
 
     return(
 
-        <div
+        <div className={`player-seat ${isCurrentTurn ? "current-turn" : ""}`}>
 
-            style={{
-
-                background:"#14532d",
-
-                border:isCurrentTurn
-                    ?"3px solid gold"
-                    :"2px solid #2d8a58",
-
-                borderRadius:"15px",
-
-                padding:"12px",
-
-                width:"140px",
-
-                color:"white",
-
-                textAlign:"center",
-
-                transition:"0.3s",
-
-                boxShadow:isCurrentTurn
-                    ?"0 0 20px gold"
-                    :"0 4px 10px rgba(0,0,0,.3)"
-
-            }}
-
-        >
-
-            <div
-                style={{
-                    fontSize:"30px"
-                }}
-            >
+            <div className="avatar">
 
                 👤
 
             </div>
 
-            <h3
-                style={{
-                    margin:"5px 0"
-                }}
-            >
+            <div className="player-name">
 
-                {isYou ? "You" : player.name}
+                {isYou ? "YOU" : player.name}
 
-            </h3>
+            </div>
 
-            <p>
+            <div className="card-count">
 
-                🃏 {player.hand.length} Cards
+                🃏 {player.hand.length}
 
-            </p>
+            </div>
 
             {
 
                 isCurrentTurn &&
 
-                <div
+                <div className="turn-indicator">
 
-                    style={{
-
-                        marginTop:"8px",
-
-                        background:"gold",
-
-                        color:"black",
-
-                        borderRadius:"8px",
-
-                        padding:"4px",
-
-                        fontWeight:"bold"
-
-                    }}
-
-                >
-
-                    YOUR TURN
+                    TURN
 
                 </div>
 

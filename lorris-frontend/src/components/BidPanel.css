@@ -1,0 +1,243 @@
+.bid-page{
+
+    min-height:100dvh;
+
+    background:#0f6b38;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:12px;
+
+    box-sizing:border-box;
+
+}
+
+
+
+.bid-card{
+
+    width:min(430px,100%);
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-sizing:border-box;
+
+    text-align:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+}
+
+
+
+.bid-card h1{
+
+    margin:5px;
+
+    color:#14532d;
+
+}
+
+
+
+.bid-info{
+
+    background:#f1f5f9;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    margin:15px 0;
+
+}
+
+
+
+.bid-info span{
+
+    display:block;
+
+    color:#666;
+
+}
+
+
+
+.bid-info strong{
+
+    font-size:45px;
+
+    color:#14532d;
+
+}
+
+
+
+.turn-box{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    margin-bottom:15px;
+
+    font-weight:bold;
+
+}
+
+
+
+.waiting-box{
+
+    background:#f1f5f9;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+
+
+.bid-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+}
+
+
+
+.bid-grid button{
+
+    height:65px;
+
+    border:none;
+
+    border-radius:15px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:white;
+
+}
+
+
+
+.bid{
+
+    background:#15803d;
+
+}
+
+
+
+.bid:hover{
+
+    background:#166534;
+
+}
+
+
+
+.pass{
+
+    background:#dc2626;
+
+}
+
+
+
+.pass:hover{
+
+    background:#b91c1c;
+
+}
+
+
+
+.my-hand{
+
+    margin-top:20px;
+
+    border-top:1px solid #ddd;
+
+    padding-top:10px;
+
+}
+
+
+
+.hand-row{
+
+    display:flex;
+
+    gap:6px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+}
+
+
+
+.hand-row::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+
+
+@media(max-width:480px){
+
+
+    .bid-card{
+
+        padding:14px;
+
+    }
+
+
+    .bid-grid button{
+
+        height:55px;
+
+        font-size:18px;
+
+    }
+
+
+    .bid-info strong{
+
+        font-size:38px;
+
+    }
+
+
+}

@@ -1,95 +1,180 @@
-import { chooseTrump } from "../api/trumpApi";
+import Card from "./Card";
+import "./TrumpPanel.css";
 
 export default function TrumpPanel({
 
     game,
 
-    playerName
+    playerName,
+
+    hand,
+
+    onTrump
 
 }) {
+
 
     const isDeclarer =
         game.declarer?.name === playerName;
 
-    async function handleTrump(trump) {
 
-        try {
+    const suits = [
 
-            await chooseTrump(
-                game.gameId,
-                playerName,
-                trump
-            );
+        {
+            name:"Hearts",
+            icon:"♥"
+        },
 
+        {
+            name:"Diamonds",
+            icon:"♦"
+        },
+
+        {
+            name:"Clubs",
+            icon:"♣"
+        },
+
+        {
+            name:"Spades",
+            icon:"♠"
         }
 
-        catch (error) {
+    ];
 
-            console.error(error);
-
-        }
-
-    }
-
-    if (!isDeclarer) {
-
-        return (
-
-            <div>
-
-                <h2>
-
-                    Waiting for
-
-                    {" "}
-
-                    {game.declarer?.name}
-
-                    {" "}
-
-                    to choose trump...
-
-                </h2>
-
-            </div>
-
-        );
-
-    }
 
     return (
 
-        <div>
+        <div className="trump-page">
 
-            <h2>
 
-                Choose Trump
+            <div className="trump-card">
 
-            </h2>
 
-            <button
-                onClick={() => handleTrump("HEARTS")}
-            >
-                ♥ Hearts
-            </button>
+                <h1>
 
-            <button
-                onClick={() => handleTrump("SPADES")}
-            >
-                ♠ Spades
-            </button>
+                    👑 Choose Trump
 
-            <button
-                onClick={() => handleTrump("DIAMONDS")}
-            >
-                ♦ Diamonds
-            </button>
+                </h1>
 
-            <button
-                onClick={() => handleTrump("CLUBS")}
-            >
-                ♣ Clubs
-            </button>
+
+                <div className="declarer-box">
+
+                    Declarer
+
+                    <strong>
+
+                        {game.declarer?.name}
+
+                    </strong>
+
+                </div>
+
+
+
+                {
+
+                isDeclarer ?
+
+                <div className="suit-grid">
+
+                    {
+                        suits.map(suit=>(
+
+                            <button
+
+                                key={suit.name}
+
+                                className={
+                                    suit.name
+                                }
+
+                                onClick={()=>
+                                    onTrump(
+                                        suit.name
+                                    )
+                                }
+
+                            >
+
+                                <span>
+
+                                    {suit.icon}
+
+                                </span>
+
+                                {suit.name}
+
+                            </button>
+
+                        ))
+                    }
+
+
+                </div>
+
+
+                :
+
+                <div className="waiting-box">
+
+                    ⏳ Waiting for
+
+                    <br/>
+
+                    <strong>
+
+                    {game.declarer?.name}
+
+                    </strong>
+
+                    <br/>
+
+                    to choose trump
+
+                </div>
+
+                }
+
+
+
+                <div className="my-hand">
+
+                    <h3>
+
+                        Your Hand
+
+                    </h3>
+
+
+                    <div className="hand-row">
+
+
+                    {
+                        hand.map((card,index)=>(
+
+                            <Card
+
+                                key={index}
+
+                                card={card}
+
+                                disabled={true}
+
+                            />
+
+                        ))
+                    }
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
 
         </div>
 

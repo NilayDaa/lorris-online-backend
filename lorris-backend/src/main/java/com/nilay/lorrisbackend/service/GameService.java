@@ -19,11 +19,13 @@ public class GameService {
     private final Map<String, Game> games = new HashMap<>();
     private final TrickService trickService;
     private final GameSocketService socketService;
+    private final ScoreService scoreService;
 
     // Single constructor with Spring Dependency Injection
-    public GameService(TrickService trickService, GameSocketService socketService) {
+    public GameService(TrickService trickService, GameSocketService socketService, ScoreService scoreService) {
         this.trickService = trickService;
         this.socketService = socketService;
+        this.scoreService = scoreService;
     }
 
     public Game createGame() {
@@ -200,4 +202,26 @@ public class GameService {
 
         return game;
     }
+
+    public Game nextRound(String gameId){
+
+        Game game = games.get(gameId);
+
+        if(game == null){
+
+            throw new RuntimeException(
+                    "Game not found"
+            );
+
+        }
+
+        scoreService.nextRound(game);
+
+        socketService.sendGameUpdate(game);
+
+        return game;
+
+    }
+
+    
 }

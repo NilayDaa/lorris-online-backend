@@ -12,7 +12,10 @@ import PlayingTable from "../components/PlayingTable";
 import PlayerSeat from "../components/PlayerSeat";
 import { getGame } from "../api/gameApi";
 import CurrentTrick from "../components/CurrentTrick";
+import TablePlayers from "../components/TablePlayers";
 import { getPlayerHand } from "../api/playerApi";
+import RoundResult from "../components/RoundResult";
+import { getTableSeats } from "../utils/tableSeats";
 import {
     connectGameSocket,
     disconnectSocket
@@ -118,129 +121,125 @@ export default function Game() {
     const myTurn =
     game.players[game.currentPlayerIndex]?.name === playerName;
 
+    const seats = getTableSeats(
+    game.players,
+    playerName);
+
+    if (
+
+        game.status === "ROUND_FINISHED" ||
+
+        game.status === "FINISHED"
+
+    ){
+
         return (
 
-        <div className="game-page">
-
-        <div className="game-table">
-
-        <div className="table-header">
-
-        <div>
-
-        <h2>Lorris Online</h2>
-
-        <p>Game ID: {game.gameId}</p>
-
-        </div>
-
-        <ScoreBoard
-
-            game={game}
-
-        />
-
-        </div>
-
-        <div className="table-center">
-
-        <div className="p2">
-            <PlayerSeat
-            player={game.players[1]}
-            isCurrentTurn={game.currentPlayerIndex===1}
-            isYou={game.players[1]?.name===playerName}
-            />        </div>
-
-        <div className="p3">
-            <PlayerSeat
-            player={game.players[2]}
-            isCurrentTurn={game.currentPlayerIndex===2}
-            isYou={game.players[2]?.name===playerName}
-            />        </div>
-
-        <div className="p1">
-            <PlayerSeat
-
-                player={game.players[0]}
-
-                isCurrentTurn={game.currentPlayerIndex === 0}
-
-                isYou={game.players[0]?.name === playerName}
-
-            />
-        </div>
-
-        <div className="p4">
-            <PlayerSeat
-            player={game.players[3]}
-            isCurrentTurn={game.currentPlayerIndex===3}
-            isYou={game.players[3]?.name===playerName}
-            />
-        </div>
-
-        <div className="p5">
-            <PlayerSeat
-            player={game.players[4]}
-            isCurrentTurn={game.currentPlayerIndex===4}
-            isYou={game.players[4]?.name===playerName}
-            />        </div>
-
-        <div className="p6">
-            <PlayerSeat
-            player={game.players[5]}
-            isCurrentTurn={game.currentPlayerIndex===5}
-            isYou={game.players[5]?.name===playerName}
-            />        </div>
-
-        <div className="center">
-
-            <CurrentTrick
+            <RoundResult
 
                 game={game}
 
             />
 
-        </div>
+        );
 
-        </div>
+    }
+    if (game.status === "BIDDING") {
 
+        return (
 
-        <div className="hand-area">
-
-            {
-
-            hand.map((card,index)=>(
-
-            <Card
-
-            key={index}
-
-            card={card}
-
-            disabled={
-            game.players[
-            game.currentPlayerIndex
-            ]?.name!==playerName
-            }
-
-            onPlay={()=>
-
-            handlePlay(card)
-
-            }
-
+            <BidPanel
+                game={game}
+                onBid={handleBid}
+                hand={hand}
+                playerName={playerName}
             />
 
-            ))
+        );
 
-            }
+    }
+    if (game.status === "CHOOSING_TRUMP") {
+
+        return (
+
+            <TrumpPanel
+                game={game}
+                playerName={playerName}
+                hand={hand}
+            />
+
+        );
+
+    }
+
+        return (
+
+        <div className="game-page">
+
+            <div className="game-header">
+
+                <ScoreBoard game={game}/>
+
+            </div>
+
+            <div className="game-content">
+
+                <TablePlayers
+
+                    players={game.players}
+
+                    currentPlayerIndex={game.currentPlayerIndex}
+
+                    playerName={playerName}
+
+                >
+
+                    <CurrentTrick
+
+                        game={game}
+
+                    />
+
+                </TablePlayers>
+
+            </div>
+
+            <div className="hand-area">
+
+                <div className="hand-container">
+
+                    <div className="hand-title">
+
+                    </div>
+
+                    <div className="hand-area">
+
+                        {
+                            hand.map((card,index)=>(
+
+                                <Card
+
+                                    key={index}
+
+                                    card={card}
+
+                                    disabled={!myTurn}
+
+                                    onPlay={()=>handlePlay(card)}
+
+                                />
+
+                            ))
+                        }
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-        </div>
-
-        );
+        )
 
     }

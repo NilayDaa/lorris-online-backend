@@ -98,6 +98,10 @@ public class Game {
         this.players =
                 new ArrayList<>();
 
+        this.completedTricks = new ArrayList<>();
+
+        this.dealerIndex = 0;
+
 
         // bidding
 

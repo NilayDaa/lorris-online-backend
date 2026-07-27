@@ -1,149 +1,177 @@
-import { useParams } from "react-router-dom";
-
-import { useNavigate } from "react-router-dom";
-
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "./Lobby.css";
 
 import { getGame } from "../api/gameApi";
+import { useNavigate } from "react-router-dom";
 import {
     connectGameSocket,
     disconnectSocket
 } from "../socket/gameSocket";
 
+import PlayerSeat from "../components/PlayerSeat";
 
-export default function Lobby() {
-
+export default function Lobby(){
 
     const { gameId } = useParams();
+
     const navigate = useNavigate();
 
+    const playerName =
+        localStorage.getItem("playerName");
 
-    const [game, setGame] = useState(null);
+    const [game,setGame] =
+        useState(null);
 
 
-
-    useEffect(() => {
-
+    useEffect(()=>{
 
         loadGame();
 
-
         connectGameSocket(
             gameId,
-            (updatedGame)=>{
-
-                console.log(
-                    "Lobby update",
-                    updatedGame
-                );
+            updatedGame=>{
 
                 setGame(updatedGame);
 
             }
         );
 
-
-
-        return ()=>{
-
-            disconnectSocket();
-
-        };
-
+        return ()=>disconnectSocket();
 
     },[]);
 
+    useEffect(() => {
 
+        if (!game) return;
+
+        if (game.status === "BIDDING") {
+
+            navigate(`/game/${game.gameId}`);
+
+        }
+
+    }, [game, navigate]);
 
     async function loadGame(){
 
-
         const data =
             await getGame(gameId);
-
 
         setGame(data);
 
     }
 
-    useEffect(() => {
-
-        if (game?.status === "BIDDING") {
-            navigate(`/game/${gameId}`);
-        }
-
-    }, [game]);
-
-
-
 
     if(!game){
 
-        return <h1>
-            Loading lobby...
-        </h1>
+        return <h2>Loading...</h2>;
 
     }
 
 
+    return(
 
-    return (
-
-        <div>
-
+        <div className="lobby-page">
 
             <h1>
-                Lobby
+
+                Lorris Lobby
+
             </h1>
 
+            <div className="lobby-table">
 
-            <h2>
-                Game ID:
-                {game.gameId}
-            </h2>
+                <div className="l2">
+                    <PlayerSeat
+                        player={game.players[1]}
+                        isYou={game.players[1]?.name===playerName}
+                    />
+                </div>
 
+                <div className="l3">
+                    <PlayerSeat
+                        player={game.players[2]}
+                        isYou={game.players[2]?.name===playerName}
+                    />
+                </div>
 
+                <div className="l1">
+                    <PlayerSeat
+                        player={game.players[0]}
+                        isYou={game.players[0]?.name===playerName}
+                    />
+                </div>
 
-            <h2>
-                Players
-                {
-                    game.players.length
-                }
-                /6
-            </h2>
+                <div className="l4">
+                    <PlayerSeat
+                        player={game.players[3]}
+                        isYou={game.players[3]?.name===playerName}
+                    />
+                </div>
 
+                <div className="l6">
+                    <PlayerSeat
+                        player={game.players[5]}
+                        isYou={game.players[5]?.name===playerName}
+                    />
+                </div>
 
+                <div className="l5">
+                    <PlayerSeat
+                        player={game.players[4]}
+                        isYou={game.players[4]?.name===playerName}
+                    />
+                </div>
 
-            <ul>
+                <div className="center-info">
 
-            {
-                game.players.map(
-                    (player,index)=>(
+                    <h2>
 
-                        <li key={index}>
-                            {player.name}
-                        </li>
+                        Game ID
 
-                    )
-                )
-            }
+                    </h2>
 
-            </ul>
+                    <h1>
 
+                        {game.gameId}
 
+                    </h1>
 
-            {
-                game.status==="BIDDING"
-                &&
-                <h2>
-                    Game Started!
-                </h2>
-            }
+                    <p>
 
+                        {game.players.length} / 6 Players
+
+                    </p>
+
+                    {
+
+                        game.players.length<6
+
+                        ?
+
+                        <div className="waiting">
+
+                            Waiting for players...
+
+                        </div>
+
+                        :
+
+                        <div className="ready">
+
+                            All Players Joined
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
 
         </div>
 
     );
-
 
 }

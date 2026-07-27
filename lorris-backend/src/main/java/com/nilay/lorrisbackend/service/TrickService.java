@@ -13,6 +13,16 @@ import com.nilay.lorrisbackend.model.Trick;
 @Service
 public class TrickService {
 
+    private final ScoreService scoreService;
+
+    public TrickService(
+            ScoreService scoreService
+    ) {
+
+        this.scoreService = scoreService;
+
+    }
+
 
     public void playCard(
             Game game,
@@ -125,6 +135,16 @@ public class TrickService {
                     game,
                     winner
             );
+
+            // Check if round finished
+            if (isRoundFinished(game)) {
+
+                scoreService.finishRound(game);
+
+                return;
+
+            }
+                        
 
 
 
@@ -424,6 +444,23 @@ public class TrickService {
 
 
     }
+
+
+    private boolean isRoundFinished(Game game) {
+
+    for (Player player : game.getPlayers()) {
+
+        if (!player.getHand().isEmpty()) {
+
+            return false;
+
+        }
+
+    }
+
+    return true;
+
+}
 
 
 

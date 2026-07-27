@@ -5,5 +5,6 @@ public enum GameStatus {
     BIDDING,
     CHOOSING_TRUMP,
     PLAYING,
+    ROUND_FINISHED,
     FINISHED
 }
