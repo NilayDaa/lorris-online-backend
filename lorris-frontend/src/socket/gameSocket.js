@@ -8,12 +8,12 @@ let client = null;
 export function connectGameSocket(gameId, callback) {
 
 
-    client = new Client({
+    const API_URL = import.meta.env.VITE_API_URL_1;
 
+    client = new Client({
         webSocketFactory: () =>
-            new SockJS(
-                "http://localhost:8080/ws"
-            ),
+            new SockJS(`${API_URL}/ws`
+                ),
 
 
         reconnectDelay: 5000,
