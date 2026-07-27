@@ -5,7 +5,7 @@ let stompClient = null;
 
 export function connect(gameId, onGameUpdate) {
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = import.meta.env.VITE_API_URL_1;
 
     const socket = new SockJS(`${apiUrl}/ws`);
 
