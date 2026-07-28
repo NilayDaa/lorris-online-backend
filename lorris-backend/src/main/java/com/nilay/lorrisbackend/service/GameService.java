@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,14 @@ public class GameService {
     private final TrickService trickService;
     private final GameSocketService socketService;
     private final ScoreService scoreService;
+    private final ScheduledExecutorService scheduler;
 
     // Single constructor with Spring Dependency Injection
-    public GameService(TrickService trickService, GameSocketService socketService, ScoreService scoreService) {
+    public GameService(TrickService trickService, GameSocketService socketService, ScoreService scoreService, ScheduledExecutorService scheduler) {
         this.trickService = trickService;
         this.socketService = socketService;
         this.scoreService = scoreService;
+        this.scheduler = scheduler;
     }
 
     public Game createGame() {
@@ -133,7 +136,22 @@ public class GameService {
 
         game.setBidsMade(game.getBidsMade() + 1);
 
+        // 0 = Pass
+        // Otherwise bids must be between 4 and 8
+        if (bid != 0 && (bid < 4 || bid > 8)) {
+            throw new RuntimeException("Bid must be between 4 and 8");
+        }
+
+        // Player is bidding
         if (bid > 0) {
+
+            // Must beat the current highest bid
+            if (bid <= game.getHighestBid()) {
+                throw new RuntimeException(
+                        "Bid must be higher than " + game.getHighestBid()
+                );
+            }
+
             game.setHighestBid(bid);
             game.setDeclarer(player);
         }
@@ -179,6 +197,15 @@ public class GameService {
     public Game playCard(String gameId, String playerName, Card card) {
         Game game = games.get(gameId);
 
+        if (game.getCurrentTrick() != null &&
+            game.getCurrentTrick().isComplete()) {
+
+            throw new RuntimeException(
+                    "Please wait for next trick."
+            );
+
+        }
+
         if (game == null) {
             throw new RuntimeException("Game not found");
         }
@@ -197,8 +224,11 @@ public class GameService {
 
         trickService.playCard(game, player, card);
 
-        // Notify subscribers over WebSocket
-        socketService.sendGameUpdate(game);
+        // Only send immediately while trick is still being played
+
+        if (!game.getCurrentTrick().isComplete()) {
+            socketService.sendGameUpdate(game);
+        }
 
         return game;
     }

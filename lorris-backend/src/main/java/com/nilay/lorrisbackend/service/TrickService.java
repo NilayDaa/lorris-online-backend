@@ -1,6 +1,9 @@
 package com.nilay.lorrisbackend.service;
 
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.stereotype.Service;
 
 import com.nilay.lorrisbackend.model.Card;
@@ -13,15 +16,22 @@ import com.nilay.lorrisbackend.model.Trick;
 @Service
 public class TrickService {
 
+    private final GameSocketService socketService;
+    private final ScheduledExecutorService scheduler;
+
     private final ScoreService scoreService;
 
     public TrickService(
-            ScoreService scoreService
-    ) {
+        ScoreService scoreService,
+        GameSocketService socketService,
+        ScheduledExecutorService scheduler
+) {
 
-        this.scoreService = scoreService;
+    this.scoreService = scoreService;
+    this.socketService = socketService;
+    this.scheduler = scheduler;
 
-    }
+}
 
 
     public void playCard(
@@ -148,21 +158,27 @@ public class TrickService {
 
 
 
-            // winner starts next trick
+            // Show completed trick first
+            socketService.sendGameUpdate(game);
 
-            game.setCurrentPlayerIndex(
-                    game.getPlayers()
-                    .indexOf(winner)
-            );
+            // Wait 5 seconds before starting next trick
+            scheduler.schedule(() -> {
+
+                game.setCurrentPlayerIndex(
+                        game.getPlayers().indexOf(winner)
+                );
+
+                game.setCurrentTrick(new Trick());
+
+                socketService.sendGameUpdate(game);
+
+            }, 5, TimeUnit.SECONDS);
+
+            return;
 
 
 
-            // create new trick
-
-            game.setCurrentTrick(
-                    new Trick()
-            );
-
+            
 
         }
 

@@ -248,7 +248,7 @@ export default function Game() {
 
                                     card={card}
 
-                                    disabled={!myTurn}
+                                    disabled={!myTurn || game.currentTrick?.complete}
 
                                     onPlay={()=>handlePlay(card)}
 
