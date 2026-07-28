@@ -16,6 +16,7 @@ import TablePlayers from "../components/TablePlayers";
 import { getPlayerHand } from "../api/playerApi";
 import RoundResult from "../components/RoundResult";
 import { getTableSeats } from "../utils/tableSeats";
+import { chooseTrump } from "../api/trumpApi";
 import {
     connectGameSocket,
     disconnectSocket
@@ -69,6 +70,29 @@ export default function Game() {
             );
 
         setHand(cards);
+
+    }
+
+    async function handleTrump(trump) {
+
+        try {
+
+            await chooseTrump(
+                gameId,
+                playerName,
+                trump
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data ||
+                "Failed to choose trump"
+            );
+
+        }
 
     }
 
@@ -166,6 +190,7 @@ export default function Game() {
                 game={game}
                 playerName={playerName}
                 hand={hand}
+                onTrump={handleTrump}
             />
 
         );
