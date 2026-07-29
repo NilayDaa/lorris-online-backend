@@ -115,6 +115,7 @@ public class GameService {
 
     public Game placeBid(String gameId, String playerName, int bid) {
         Game game = games.get(gameId);
+        game.setBidsMade(game.getBidsMade() + 1);
 
         if (game == null) {
             throw new RuntimeException("Game not found");
@@ -130,11 +131,8 @@ public class GameService {
             throw new RuntimeException("Not your turn");
         }
 
-        if (bid < 0 || bid > 8) {
-            throw new RuntimeException("Invalid bid");
-        }
 
-        game.setBidsMade(game.getBidsMade() + 1);
+        
 
         // 0 = Pass
         // Otherwise bids must be between 4 and 8
@@ -156,9 +154,14 @@ public class GameService {
             game.setDeclarer(player);
         }
 
+        game.setBidsMade(game.getBidsMade() + 1);
+
         game.setCurrentBidderIndex((game.getCurrentBidderIndex() + 1) % 6);
 
         if (game.getBidsMade() == 6) {
+            System.out.println("Bids made: " + game.getBidsMade());
+            System.out.println("Highest bid: " + game.getHighestBid());
+            System.out.println("Declarer: " + (game.getDeclarer() == null ? "null" : game.getDeclarer().getName()));
             game.setBiddingFinished(true);
 
             if (game.getDeclarer() == null) {
