@@ -58,6 +58,10 @@ public class GameService {
     }
 
     public Game joinGame(String gameId, String playerName) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            throw new RuntimeException("Player name is required");
+        }
+
         Game game = games.get(gameId);
 
         if (game == null) {

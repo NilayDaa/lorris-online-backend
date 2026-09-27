@@ -192,7 +192,7 @@ export default function Home(){
             console.error(error);
 
             toast.error(
-                error.response?.data || "Failed to join game. Please check the Game ID and try again."
+                (typeof error.response?.data === "object" ? (error.response?.data?.error || error.response?.data?.message || "Failed to join game") : error.response?.data) || "Failed to join game. Please check the Game ID and try again."
             );
 
         }
