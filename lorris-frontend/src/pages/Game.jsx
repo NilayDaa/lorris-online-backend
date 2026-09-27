@@ -48,24 +48,26 @@ export default function Game() {
 
         loadHand();
 
-        connectGameSocket(
+        const socketClient = connectGameSocket(
             gameId,
             (updatedGame) => {
 
                 setGame(updatedGame);
 
-                loadHand();
-
+                // Don't reload hand on every socket update; the server sends full state
             }
         );
 
         return () => {
 
+            if (socketClient) {
+                socketClient.deactivate();
+            }
             disconnectSocket();
 
         };
 
-    }, []);
+    }, [gameId]);
 
     async function loadGame() {
         try {
