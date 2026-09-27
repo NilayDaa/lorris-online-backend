@@ -50,7 +50,11 @@ public class GameService {
     }
 
     public Game getGame(String id) {
-        return games.get(id);
+        Game g = games.get(id);
+        if (g == null) {
+            throw new RuntimeException("Game not found");
+        }
+        return g;
     }
 
     public Game joinGame(String gameId, String playerName) {

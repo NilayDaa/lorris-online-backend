@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lorris-backend
+  labels:
+    app: lorris-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lorris-backend
+  template:
+    metadata:
+      labels:
+        app: lorris-backend
+    spec:
+      containers:
+      - name: lorris-backend
+        image: gcr.io/project-1d2a170d-5ed3-48e3-82c/lorris-backend:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod

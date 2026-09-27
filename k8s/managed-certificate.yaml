@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: lorris-api-certificate
+spec:
+  domains:
+    - api4.nilaydas.com

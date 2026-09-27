@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lorris-api-ingress
+  annotations:
+    networking.gke.io/managed-certificates: lorris-api-certificate
+    kubernetes.io/ingress.class: "gce"
+spec:
+  rules:
+    - host: api4.nilaydas.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lorris-backend-service
+                port:
+                  number: 80
