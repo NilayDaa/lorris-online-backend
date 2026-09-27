@@ -73,14 +73,19 @@ public class ScoreService {
 
         }
 
-        // Round winner
+        // Round winner - handle ties
         if (game.getTricksTeamA() > game.getTricksTeamB()) {
 
             game.setWinnerTeam("Team A");
 
-        } else {
+        } else if (game.getTricksTeamB() > game.getTricksTeamA()) {
 
             game.setWinnerTeam("Team B");
+
+        } else {
+
+            // Tie - no winner for this round
+            game.setWinnerTeam(null);
 
         }
 

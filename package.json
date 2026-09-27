@@ -1,0 +1,14 @@
+{
+  "name": "lorris-online-backend",
+  "version": "1.0.0",
+  "description": "Lorris Online - 3 vs 3 Trick Taking Card Game",
+  "scripts": {
+    "dev": "concurrently \"cd lorris-backend && ./mvnw spring-boot:run\" \"cd lorris-frontend && npm run dev\"",
+    "build": "cd lorris-frontend && npm run build",
+    "backend": "cd lorris-backend && ./mvnw spring-boot:run",
+    "frontend": "cd lorris-frontend && npm run dev"
+  },
+  "keywords": ["card game", "multiplayer", "online game"],
+  "author": "",
+  "license": "MIT"
+}

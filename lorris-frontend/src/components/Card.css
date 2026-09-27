@@ -1,14 +1,14 @@
 .playing-card{
 
-    width:48px;
+    width:60px;
 
-    height:32px;
+    height:88px;
 
     background:white;
 
     border-radius:8px;
 
-    border:1px solid #333;
+    border:2px solid #333;
 
     display:flex;
 
@@ -18,26 +18,49 @@
 
     align-items:center;
 
-    padding:6px;
+    padding:8px 6px;
 
     cursor:pointer;
 
-    transition:.2s;
+    transition:all .2s ease-out;
 
     font-weight:bold;
 
     user-select:none;
 
-    margin-right:-18px;
+    margin-right:-24px;
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+    position: relative;
 
 }
 
-.playing-card:hover{
+.playing-card:last-child {
+    margin-right: 0;
+}
 
-    transform:translateY(-15px);
+.playing-card:not(:disabled):hover{
 
-    box-shadow:0 8px 20px rgba(0,0,0,.4);
+    transform:translateY(-25px) scale(1.05);
 
+    box-shadow:0 12px 24px rgba(0,0,0,.4);
+
+    z-index: 10;
+
+    margin-left: 4px;
+
+    margin-right: -20px;
+
+}
+
+.playing-card:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.playing-card:active:not(:disabled) {
+    transform: translateY(-20px) scale(1.02);
 }
 
 .red{
@@ -54,12 +77,75 @@
 
 .card-suit{
 
-    font-size:18px;
+    font-size:24px;
 
 }
 
 .card-rank{
 
-    font-size:13px;
+    font-size:16px;
 
+    font-weight: bold;
+
+}
+
+/* Mobile optimizations */
+@media(max-width: 700px) {
+    .playing-card {
+        width: 56px;
+        height: 82px;
+        margin-right: -22px;
+        padding: 6px 4px;
+    }
+
+    .playing-card:not(:disabled):hover {
+        transform: translateY(-20px) scale(1.05);
+    }
+
+    .card-suit {
+        font-size: 22px;
+    }
+
+    .card-rank {
+        font-size: 15px;
+    }
+}
+
+/* Smaller phones */
+@media(max-width: 400px) {
+    .playing-card {
+        width: 52px;
+        height: 76px;
+        margin-right: -20px;
+        padding: 5px 3px;
+    }
+
+    .card-suit {
+        font-size: 20px;
+    }
+
+    .card-rank {
+        font-size: 14px;
+    }
+}
+
+/* Landscape mode */
+@media(max-height: 500px) and (orientation: landscape) {
+    .playing-card {
+        width: 48px;
+        height: 70px;
+        margin-right: -18px;
+    }
+
+    .card-suit {
+        font-size: 18px;
+    }
+
+    .card-rank {
+        font-size: 13px;
+    }
+
+    .playing-card:not(:disabled):hover {
+        transform: translateY(-15px) scale(1.05);
+    }
 }

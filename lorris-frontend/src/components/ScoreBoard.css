@@ -6,7 +6,7 @@
 
     align-items:center;
 
-    gap:8px;
+    gap:10px;
 
     flex-wrap:wrap;
 
@@ -14,7 +14,7 @@
 
     border-radius:15px;
 
-    padding:8px;
+    padding:10px 12px;
 
     color:white;
 
@@ -36,29 +36,39 @@
 
     align-items:center;
 
-    min-width:70px;
+    min-width:75px;
 
-    padding:6px 8px;
+    padding:8px 10px;
 
     border-radius:10px;
 
     background:rgba(255,255,255,.08);
 
+    transition: all 0.3s;
+
+}
+
+.score-item:hover {
+    background:rgba(255,255,255,.12);
 }
 
 .title{
 
-    font-size:10px;
+    font-size:11px;
 
-    color:#d8d8d8;
+    color:#e0e0e0;
 
-    margin-bottom:3px;
+    margin-bottom:4px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
 
 }
 
 .value{
 
-    font-size:18px;
+    font-size:20px;
 
     font-weight:bold;
 
@@ -66,7 +76,7 @@
 
 .small{
 
-    font-size:13px;
+    font-size:14px;
 
 }
 
@@ -74,11 +84,53 @@
 
     background:#156f3c;
 
+    min-width:130px;
+
+    border: 2px solid #1a8f4a;
+
 }
 
 .scoreB{
 
     background:#1f5cbf;
+
+    min-width:130px;
+
+    border: 2px solid #2d6fd9;
+
+}
+
+.team-players{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:3px;
+
+    margin-top:6px;
+
+    font-size:11px;
+
+    color:#f0f0f0;
+
+    width:100%;
+
+}
+
+.player-name{
+
+    text-align:center;
+
+    padding:3px 6px;
+
+    background:rgba(0,0,0,.25);
+
+    border-radius:5px;
+
+    font-size:10px;
+
+    font-weight: 600;
 
 }
 
@@ -86,36 +138,119 @@
 
     .score-board{
 
-        gap:6px;
+        gap:8px;
 
-        padding:6px;
+        padding:8px 10px;
 
     }
 
     .score-item{
 
-        min-width:60px;
+        min-width:68px;
 
-        padding:5px;
+        padding:6px 8px;
 
     }
 
     .title{
 
-        font-size:9px;
+        font-size:10px;
 
     }
 
     .value{
 
-        font-size:15px;
+        font-size:17px;
 
     }
 
     .small{
 
-        font-size:11px;
+        font-size:13px;
 
     }
 
+    .scoreA, .scoreB{
+
+        min-width:110px;
+
+    }
+
+    .player-name{
+
+        font-size:9px;
+
+        padding: 2px 4px;
+
+    }
+
+}
+
+/* Very small phones */
+@media(max-width: 360px) {
+    .score-board {
+        gap: 6px;
+        padding: 6px 8px;
+    }
+
+    .score-item {
+        min-width: 60px;
+        padding: 5px 6px;
+    }
+
+    .title {
+        font-size: 9px;
+    }
+
+    .value {
+        font-size: 15px;
+    }
+
+    .small {
+        font-size: 12px;
+    }
+
+    .scoreA, .scoreB {
+        min-width: 95px;
+    }
+
+    .player-name {
+        font-size: 8px;
+    }
+}
+
+/* Landscape mode */
+@media(max-height: 500px) and (orientation: landscape) {
+    .score-board {
+        padding: 6px 8px;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .score-item {
+        min-width: 60px;
+        padding: 4px 6px;
+    }
+
+    .title {
+        font-size: 9px;
+    }
+
+    .value {
+        font-size: 14px;
+    }
+
+    .small {
+        font-size: 11px;
+    }
+
+    .team-players {
+        margin-top: 3px;
+        gap: 2px;
+    }
+
+    .player-name {
+        font-size: 8px;
+        padding: 2px 3px;
+    }
 }

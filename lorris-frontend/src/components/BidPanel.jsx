@@ -1,4 +1,5 @@
 import Card from "./Card";
+import toast from 'react-hot-toast';
 import "./BidPanel.css";
 
 export default function BidPanel({
@@ -18,6 +19,14 @@ export default function BidPanel({
         game.players[
             game.currentBidderIndex
         ]?.name === playerName;
+
+    function handleBidClick(bid) {
+        if (bid > 0 && bid <= game.highestBid) {
+            toast.error(`Bid must be higher than ${game.highestBid}`);
+            return;
+        }
+        onBid(bid);
+    }
 
 
     return (
@@ -41,14 +50,14 @@ export default function BidPanel({
 
                     <span>
 
-                        Highest Bid
+                        Current Highest Bid
 
                     </span>
 
 
                     <strong>
 
-                        {game.highestBid}
+                        {game.highestBid || "None"}
 
                     </strong>
 
@@ -67,7 +76,7 @@ export default function BidPanel({
 
                     <div className="turn-box">
 
-                        ✅ Your Turn
+                        ✅ Your Turn to Bid
 
                     </div>
 
@@ -78,7 +87,7 @@ export default function BidPanel({
 
                     {
 
-                    [0,1,2,3,4,5,6,7,8]
+                    [0, 4, 5, 6, 7, 8]
 
                     .map(bid=>(
 
@@ -93,7 +102,14 @@ export default function BidPanel({
                                 :"bid"
                             }
 
-                            onClick={()=>onBid(bid)}
+                            onClick={()=>handleBidClick(bid)}
+
+                            disabled={bid > 0 && bid <= game.highestBid}
+
+                            style={{
+                                opacity: bid > 0 && bid <= game.highestBid ? 0.5 : 1,
+                                cursor: bid > 0 && bid <= game.highestBid ? 'not-allowed' : 'pointer'
+                            }}
 
                         >
 
@@ -107,7 +123,7 @@ export default function BidPanel({
 
                             :
 
-                            bid
+                            `${bid} Tricks`
 
                             }
 
@@ -145,6 +161,8 @@ export default function BidPanel({
 
                     </strong>
 
+                    to bid...
+
                 </div>
 
 
@@ -158,7 +176,7 @@ export default function BidPanel({
 
                     <h3>
 
-                        Your Hand
+                        Your Hand ({hand.length} cards)
 
                     </h3>
 

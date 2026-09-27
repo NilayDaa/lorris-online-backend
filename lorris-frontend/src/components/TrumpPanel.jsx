@@ -1,4 +1,5 @@
 import Card from "./Card";
+import toast from 'react-hot-toast';
 import "./TrumpPanel.css";
 
 export default function TrumpPanel({
@@ -22,22 +23,26 @@ export default function TrumpPanel({
 
         {
             name:"Hearts",
-            icon:"♥"
+            icon:"♥",
+            color: "#dc2626"
         },
 
         {
             name:"Diamonds",
-            icon:"♦"
+            icon:"♦",
+            color: "#ea580c"
         },
 
         {
             name:"Clubs",
-            icon:"♣"
+            icon:"♣",
+            color: "#14532d"
         },
 
         {
             name:"Spades",
-            icon:"♠"
+            icon:"♠",
+            color: "#1e3a8a"
         }
 
     ];
@@ -53,7 +58,7 @@ export default function TrumpPanel({
 
                 <h1>
 
-                    👑 Choose Trump
+                    👑 Choose Trump Suit
 
                 </h1>
 
@@ -67,6 +72,14 @@ export default function TrumpPanel({
                         {game.declarer?.name}
 
                     </strong>
+
+                    <div style={{
+                        fontSize: '14px',
+                        color: '#666',
+                        marginTop: '4px'
+                    }}>
+                        Bid: {game.highestBid} tricks
+                    </div>
 
                 </div>
 
@@ -130,7 +143,7 @@ export default function TrumpPanel({
 
                     <br/>
 
-                    to choose trump
+                    to choose trump suit
 
                 </div>
 
@@ -142,7 +155,7 @@ export default function TrumpPanel({
 
                     <h3>
 
-                        Your Hand
+                        Your Hand ({hand.length} cards)
 
                     </h3>
 

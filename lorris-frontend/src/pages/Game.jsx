@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Game.css";
 import { useParams } from "react-router-dom";
 import { placeBid } from "../api/bidApi";
+import toast, { Toaster } from 'react-hot-toast';
 import PlayerList from "../components/PlayerList";
 import BidPanel from "../components/BidPanel";
 import TrumpPanel from "../components/TrumpPanel";
@@ -15,8 +16,10 @@ import CurrentTrick from "../components/CurrentTrick";
 import TablePlayers from "../components/TablePlayers";
 import { getPlayerHand } from "../api/playerApi";
 import RoundResult from "../components/RoundResult";
+import TrickComplete from "../components/TrickComplete";
 import { getTableSeats } from "../utils/tableSeats";
 import { chooseTrump } from "../api/trumpApi";
+import { continueToNextTrick } from "../api/continueApi";
 import {
     connectGameSocket,
     disconnectSocket
@@ -28,8 +31,16 @@ export default function Game() {
 
     const [game, setGame] = useState(null);
     const [hand, setHand] = useState([]);
+    const [loading, setLoading] = useState(true);
     const playerName =
         localStorage.getItem("playerName");
+
+    // Vibration feedback for mobile
+    function vibrateOnAction() {
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
 
     useEffect(() => {
 
@@ -57,19 +68,30 @@ export default function Game() {
     }, []);
 
     async function loadGame() {
-        const data = await getGame(gameId);
-        setGame(data);
+        try {
+            const data = await getGame(gameId);
+            setGame(data);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to load game");
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function loadHand() {
 
-        const cards =
-            await getPlayerHand(
-                gameId,
-                playerName
-            );
+        try {
+            const cards =
+                await getPlayerHand(
+                    gameId,
+                    playerName
+                );
 
-        setHand(cards);
+            setHand(cards);
+        } catch (error) {
+            console.error(error);
+        }
 
     }
 
@@ -77,17 +99,21 @@ export default function Game() {
 
         try {
 
+            vibrateOnAction();
+
             await chooseTrump(
                 gameId,
                 playerName,
                 trump
             );
 
+            toast.success(`Trump set to ${trump}!`);
+
         } catch (error) {
 
             console.error(error);
 
-            alert(
+            toast.error(
                 error.response?.data ||
                 "Failed to choose trump"
             );
@@ -98,21 +124,41 @@ export default function Game() {
 
     async function handleBid(bid) {
 
-        await placeBid(
+        try {
 
-            gameId,
+            vibrateOnAction();
 
-            playerName,
+            await placeBid(
 
-            bid
+                gameId,
 
-        );
+                playerName,
+
+                bid
+
+            );
+
+            if (bid === 0) {
+                toast.success("You passed");
+            } else {
+                toast.success(`Bid placed: ${bid} tricks`);
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.error(
+                error.response?.data ||
+                "Failed to place bid"
+            );
+        }
 
     }
 
     async function handlePlay(card) {
 
         try {
+
+            vibrateOnAction();
 
             await playCard(
 
@@ -124,22 +170,65 @@ export default function Game() {
 
             );
 
+            toast.success("Card played!");
+
         }
 
         catch (error) {
 
             console.error(error);
 
-            alert(error.response?.data || "Cannot play card");
+            toast.error(error.response?.data || "Cannot play this card");
 
         }
 
     }
 
-    
+    async function handleContinue() {
 
-    if (!game) {
-        return <h2>Loading...</h2>;
+        try {
+
+            vibrateOnAction();
+
+            await continueToNextTrick(gameId, playerName);
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error("Failed to continue");
+
+        }
+
+    }
+
+
+
+    if (loading || !game) {
+        return (
+            <div className="game-page">
+                <Toaster position="top-center" />
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '60vh',
+                    gap: '20px',
+                    color: 'white'
+                }}>
+                    <div className="spinner-large" style={{
+                        width: '50px',
+                        height: '50px',
+                        border: '4px solid rgba(255, 255, 255, 0.3)',
+                        borderTop: '4px solid white',
+                        borderRadius: '50%',
+                        animation: 'spin 0.8s linear infinite'
+                    }}></div>
+                    <h2>Loading game...</h2>
+                </div>
+            </div>
+        );
     }
 
     const myTurn =
@@ -159,11 +248,14 @@ export default function Game() {
 
         return (
 
-            <RoundResult
+            <>
+                <Toaster position="top-center" />
+                <RoundResult
 
-                game={game}
+                    game={game}
 
-            />
+                />
+            </>
 
         );
 
@@ -172,12 +264,15 @@ export default function Game() {
 
         return (
 
-            <BidPanel
-                game={game}
-                onBid={handleBid}
-                hand={hand}
-                playerName={playerName}
-            />
+            <>
+                <Toaster position="top-center" />
+                <BidPanel
+                    game={game}
+                    onBid={handleBid}
+                    hand={hand}
+                    playerName={playerName}
+                />
+            </>
 
         );
 
@@ -186,12 +281,15 @@ export default function Game() {
 
         return (
 
-            <TrumpPanel
-                game={game}
-                playerName={playerName}
-                hand={hand}
-                onTrump={handleTrump}
-            />
+            <>
+                <Toaster position="top-center" />
+                <TrumpPanel
+                    game={game}
+                    playerName={playerName}
+                    hand={hand}
+                    onTrump={handleTrump}
+                />
+            </>
 
         );
 
@@ -201,9 +299,19 @@ export default function Game() {
 
         <div className="game-page">
 
+            <Toaster position="top-center" />
+
+            {game.waitingForContinue && (
+                <TrickComplete
+                    game={game}
+                    playerName={playerName}
+                    onContinue={handleContinue}
+                />
+            )}
+
             <div className="game-header">
 
-                <ScoreBoard game={game}/>
+                <ScoreBoard game={game} playerName={playerName}/>
 
             </div>
 
@@ -234,7 +342,8 @@ export default function Game() {
                 <div className="hand-container">
 
                     <div className="hand-title">
-
+                        Your Hand ({hand.length} {hand.length === 1 ? 'card' : 'cards'})
+                        {myTurn && " - Your turn!"}
                     </div>
 
                     <div className="hand-area">

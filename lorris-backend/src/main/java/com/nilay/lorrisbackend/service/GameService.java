@@ -22,13 +22,15 @@ public class GameService {
     private final GameSocketService socketService;
     private final ScoreService scoreService;
     private final ScheduledExecutorService scheduler;
+    private final ContinueService continueService;
 
     // Single constructor with Spring Dependency Injection
-    public GameService(TrickService trickService, GameSocketService socketService, ScoreService scoreService, ScheduledExecutorService scheduler) {
+    public GameService(TrickService trickService, GameSocketService socketService, ScoreService scoreService, ScheduledExecutorService scheduler, ContinueService continueService) {
         this.trickService = trickService;
         this.socketService = socketService;
         this.scoreService = scoreService;
         this.scheduler = scheduler;
+        this.continueService = continueService;
     }
 
     public Game createGame() {
@@ -62,6 +64,13 @@ public class GameService {
             throw new RuntimeException("Game full");
         }
 
+        // Check for duplicate name
+        for (Player p : game.getPlayers()) {
+            if (p.getName().equalsIgnoreCase(playerName)) {
+                throw new RuntimeException("Name already taken");
+            }
+        }
+
         game.getPlayers().add(new Player(playerName));
 
         if (game.getPlayers().size() == 6) {
@@ -75,6 +84,33 @@ public class GameService {
     }
 
     private void startGame(Game game) {
+        Deck deck = game.getDeck();
+        deck.shuffle();
+
+        for (int i = 0; i < 8; i++) {
+            for (Player player : game.getPlayers()) {
+                player.addCard(deck.dealCard());
+            }
+        }
+
+        game.setStatus(GameStatus.BIDDING);
+    }
+
+    private void restartRound(Game game) {
+        // Clear all players' hands
+        for (Player player : game.getPlayers()) {
+            player.getHand().clear();
+        }
+
+        // Reset bidding state
+        game.setHighestBid(0);
+        game.setDeclarer(null);
+        game.setCurrentBidderIndex(0);
+        game.setBidsMade(0);
+        game.setBiddingFinished(false);
+
+        // Create new deck and re-deal
+        game.setDeck(new Deck());
         Deck deck = game.getDeck();
         deck.shuffle();
 
@@ -115,7 +151,6 @@ public class GameService {
 
     public Game placeBid(String gameId, String playerName, int bid) {
         Game game = games.get(gameId);
-        game.setBidsMade(game.getBidsMade() + 1);
 
         if (game == null) {
             throw new RuntimeException("Game not found");
@@ -165,7 +200,9 @@ public class GameService {
             game.setBiddingFinished(true);
 
             if (game.getDeclarer() == null) {
-                game.setStatus(GameStatus.FINISHED);
+                // Everyone passed - restart the round with new cards
+                System.out.println("All players passed. Restarting round...");
+                restartRound(game);
             } else {
                 game.setStatus(GameStatus.CHOOSING_TRUMP);
             }
@@ -200,6 +237,14 @@ public class GameService {
     public Game playCard(String gameId, String playerName, Card card) {
         Game game = games.get(gameId);
 
+        if (game == null) {
+            throw new RuntimeException("Game not found");
+        }
+
+        if (game.getStatus() != GameStatus.PLAYING) {
+            throw new RuntimeException("Not in playing phase");
+        }
+
         if (game.getCurrentTrick() != null &&
             game.getCurrentTrick().isComplete()) {
 
@@ -207,10 +252,6 @@ public class GameService {
                     "Please wait for next trick."
             );
 
-        }
-
-        if (game == null) {
-            throw new RuntimeException("Game not found");
         }
 
         Player player = null;
@@ -248,6 +289,10 @@ public class GameService {
 
         }
 
+        if (game.getStatus() != GameStatus.ROUND_FINISHED) {
+            throw new RuntimeException("Round not finished");
+        }
+
         scoreService.nextRound(game);
 
         socketService.sendGameUpdate(game);
@@ -256,5 +301,19 @@ public class GameService {
 
     }
 
-    
+    public Game playerContinue(String gameId, String playerName){
+
+        Game game = games.get(gameId);
+
+        if(game == null){
+            throw new RuntimeException("Game not found");
+        }
+
+        continueService.playerReady(game, playerName);
+
+        return game;
+
+    }
+
+
 }

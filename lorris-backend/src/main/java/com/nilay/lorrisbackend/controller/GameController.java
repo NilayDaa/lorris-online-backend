@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nilay.lorrisbackend.dto.BidRequest;
+import com.nilay.lorrisbackend.dto.ContinueRequest;
 import com.nilay.lorrisbackend.dto.JoinGameRequest;
 import com.nilay.lorrisbackend.dto.PlayCardRequest;
 import com.nilay.lorrisbackend.dto.TrumpRequest;
@@ -245,6 +246,16 @@ public class GameController {
         return gameService.nextRound(gameId);
 
         }
+
+    @PostMapping("/{gameId}/continue")
+    public Game continueGame(
+            @PathVariable String gameId,
+            @RequestBody ContinueRequest request
+    ){
+
+        return gameService.playerContinue(gameId, request.getPlayerName());
+
+    }
 
 
 

@@ -20,13 +20,13 @@
 
 .bid-card{
 
-    width:min(430px,100%);
+    width:min(450px,100%);
 
     background:white;
 
     border-radius:20px;
 
-    padding:18px;
+    padding:20px;
 
     box-sizing:border-box;
 
@@ -40,7 +40,7 @@
 
 .bid-card h1{
 
-    margin:5px;
+    margin:8px;
 
     color:#14532d;
 
@@ -54,7 +54,7 @@
 
     border-radius:12px;
 
-    padding:12px;
+    padding:14px;
 
     margin:15px 0;
 
@@ -68,13 +68,15 @@
 
     color:#666;
 
+    font-size: 14px;
+
 }
 
 
 
 .bid-info strong{
 
-    font-size:45px;
+    font-size:48px;
 
     color:#14532d;
 
@@ -90,12 +92,25 @@
 
     border-radius:12px;
 
-    padding:12px;
+    padding:14px;
 
     margin-bottom:15px;
 
     font-weight:bold;
 
+    font-size: 16px;
+
+    animation: pulse 2s infinite;
+
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.85;
+    }
 }
 
 
@@ -112,7 +127,9 @@
 
     flex-direction:column;
 
-    gap:5px;
+    gap:8px;
+
+    font-size: 15px;
 
 }
 
@@ -124,7 +141,7 @@
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:12px;
+    gap:14px;
 
 }
 
@@ -132,18 +149,28 @@
 
 .bid-grid button{
 
-    height:65px;
+    height:70px;
 
     border:none;
 
     border-radius:15px;
 
-    font-size:22px;
+    font-size:24px;
 
     font-weight:bold;
 
     color:white;
 
+    cursor: pointer;
+
+    transition: all 0.3s;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+
+}
+
+.bid-grid button:active {
+    transform: scale(0.95);
 }
 
 
@@ -159,6 +186,10 @@
 .bid:hover{
 
     background:#166534;
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.4);
 
 }
 
@@ -176,6 +207,10 @@
 
     background:#b91c1c;
 
+    transform: translateY(-3px);
+
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+
 }
 
 
@@ -184,10 +219,16 @@
 
     margin-top:20px;
 
-    border-top:1px solid #ddd;
+    border-top:2px solid #e5e7eb;
 
-    padding-top:10px;
+    padding-top:12px;
 
+}
+
+.my-hand h3 {
+    margin: 8px 0;
+    color: #374151;
+    font-size: 16px;
 }
 
 
@@ -196,11 +237,15 @@
 
     display:flex;
 
-    gap:6px;
+    gap:0;
 
     overflow-x:auto;
 
-    scrollbar-width:none;
+    scrollbar-width:thin;
+
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+
+    padding: 4px 0;
 
 }
 
@@ -208,8 +253,17 @@
 
 .hand-row::-webkit-scrollbar{
 
-    display:none;
+    height: 6px;
 
+}
+
+.hand-row::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hand-row::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 3px;
 }
 
 
@@ -219,25 +273,69 @@
 
     .bid-card{
 
-        padding:14px;
+        padding:16px;
 
     }
 
 
     .bid-grid button{
 
-        height:55px;
+        height:60px;
 
-        font-size:18px;
+        font-size:20px;
 
     }
 
 
     .bid-info strong{
 
-        font-size:38px;
+        font-size:42px;
 
     }
 
+    .turn-box, .waiting-box {
+        font-size: 14px;
+    }
 
+
+}
+
+/* Landscape mode */
+@media(max-height: 500px) and (orientation: landscape) {
+    .bid-page {
+        padding: 10px;
+    }
+
+    .bid-card {
+        max-height: 95vh;
+        overflow-y: auto;
+        padding: 14px;
+    }
+
+    .bid-card h1 {
+        font-size: 22px;
+        margin: 4px;
+    }
+
+    .bid-info {
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .bid-info strong {
+        font-size: 36px;
+    }
+
+    .bid-grid {
+        gap: 10px;
+    }
+
+    .bid-grid button {
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .my-hand {
+        margin-top: 12px;
+    }
 }

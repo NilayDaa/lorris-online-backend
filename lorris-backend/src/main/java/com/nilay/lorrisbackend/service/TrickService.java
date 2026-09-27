@@ -151,6 +151,9 @@ public class TrickService {
 
                 scoreService.finishRound(game);
 
+                // Broadcast ROUND_FINISHED state
+                socketService.sendGameUpdate(game);
+
                 return;
 
             }
@@ -158,21 +161,11 @@ public class TrickService {
 
 
 
-            // Show completed trick first
+            // Show completed trick and wait for all players to continue
+            game.setWaitingForContinue(true);
+            game.getPlayersReadyForNextTrick().clear();
+
             socketService.sendGameUpdate(game);
-
-            // Wait 5 seconds before starting next trick
-            scheduler.schedule(() -> {
-
-                game.setCurrentPlayerIndex(
-                        game.getPlayers().indexOf(winner)
-                );
-
-                game.setCurrentTrick(new Trick());
-
-                socketService.sendGameUpdate(game);
-
-            }, 5, TimeUnit.SECONDS);
 
             return;
 

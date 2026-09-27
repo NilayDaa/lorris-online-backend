@@ -8,7 +8,7 @@ let client = null;
 export function connectGameSocket(gameId, callback) {
 
 
-    const API_URL = import.meta.env.VITE_API_URL_1;
+    const API_URL = import.meta.env.VITE_API_URL_1 || "http://localhost:8080";
 
     client = new Client({
         webSocketFactory: () =>
@@ -18,12 +18,15 @@ export function connectGameSocket(gameId, callback) {
 
         reconnectDelay: 5000,
 
+        debug: (str) => {
+            console.log("STOMP Debug:", str);
+        },
 
         onConnect: () => {
 
 
             console.log(
-                "WebSocket connected"
+                "WebSocket connected to game:", gameId
             );
 
 
@@ -41,7 +44,7 @@ export function connectGameSocket(gameId, callback) {
 
 
                     console.log(
-                        "Received update",
+                        "Received game update:",
                         data
                     );
 
@@ -55,6 +58,14 @@ export function connectGameSocket(gameId, callback) {
             );
 
 
+        },
+
+        onStompError: (frame) => {
+            console.error("STOMP error:", frame);
+        },
+
+        onWebSocketError: (error) => {
+            console.error("WebSocket error:", error);
         }
 
     });

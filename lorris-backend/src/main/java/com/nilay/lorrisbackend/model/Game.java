@@ -67,6 +67,11 @@ public class Game {
 
     private int tricksTeamB;
 
+    // Continue acknowledgments
+    private List<String> playersReadyForNextTrick;
+
+    private boolean waitingForContinue;
+
 
 
 
@@ -124,13 +129,17 @@ public class Game {
         this.currentPlayerIndex = 0;
 
         this.currentTrick = new Trick();
-        
+
 
 
 
         this.tricksTeamA = 0;
 
         this.tricksTeamB = 0;
+
+        this.playersReadyForNextTrick = new ArrayList<>();
+
+        this.waitingForContinue = false;
 
 
 

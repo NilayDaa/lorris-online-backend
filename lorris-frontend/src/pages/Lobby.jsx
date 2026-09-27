@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 import "./Lobby.css";
 
 import { getGame } from "../api/gameApi";
@@ -22,6 +23,8 @@ export default function Lobby(){
 
     const [game,setGame] =
         useState(null);
+
+    const [copied, setCopied] = useState(false);
 
 
     useEffect(()=>{
@@ -55,17 +58,69 @@ export default function Lobby(){
 
     async function loadGame(){
 
-        const data =
-            await getGame(gameId);
+        try {
+            const data =
+                await getGame(gameId);
 
-        setGame(data);
+            setGame(data);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to load game");
+            navigate("/");
+        }
 
+    }
+
+    async function copyGameId() {
+        try {
+            await navigator.clipboard.writeText(gameId);
+            setCopied(true);
+            toast.success("Game ID copied to clipboard!");
+            setTimeout(() => setCopied(false), 2000);
+        } catch (error) {
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = gameId;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            setCopied(true);
+            toast.success("Game ID copied!");
+            setTimeout(() => setCopied(false), 2000);
+        }
+    }
+
+    function shareGame() {
+        const shareUrl = `${window.location.origin}/lobby/${gameId}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join my Lorris game!',
+                text: `Join my Lorris game with ID: ${gameId}`,
+                url: shareUrl,
+            }).catch(() => {
+                // User cancelled, do nothing
+            });
+        } else {
+            // Fallback: copy link
+            navigator.clipboard.writeText(shareUrl);
+            toast.success("Game link copied to clipboard!");
+        }
     }
 
 
     if(!game){
 
-        return <h2>Loading...</h2>;
+        return (
+            <div className="lobby-page">
+                <Toaster position="top-center" />
+                <div className="loading-container">
+                    <div className="spinner-large"></div>
+                    <h2>Loading game...</h2>
+                </div>
+            </div>
+        );
 
     }
 
@@ -73,6 +128,8 @@ export default function Lobby(){
     return(
 
         <div className="lobby-page">
+
+            <Toaster position="top-center" />
 
             <h1>
 
@@ -132,11 +189,26 @@ export default function Lobby(){
 
                     </h2>
 
-                    <h1>
+                    <h1 className="game-id-display">
 
                         {game.gameId}
 
                     </h1>
+
+                    <div className="action-buttons">
+                        <button
+                            className="copy-btn"
+                            onClick={copyGameId}
+                        >
+                            {copied ? "✓ Copied!" : "📋 Copy ID"}
+                        </button>
+                        <button
+                            className="share-btn"
+                            onClick={shareGame}
+                        >
+                            🔗 Share
+                        </button>
+                    </div>
 
                     <p>
 
@@ -152,6 +224,11 @@ export default function Lobby(){
 
                         <div className="waiting">
 
+                            <div className="waiting-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
                             Waiting for players...
 
                         </div>
@@ -160,7 +237,8 @@ export default function Lobby(){
 
                         <div className="ready">
 
-                            All Players Joined
+                            All Players Joined!<br/>
+                            Starting game...
 
                         </div>
 
