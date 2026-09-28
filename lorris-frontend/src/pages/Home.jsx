@@ -191,9 +191,13 @@ export default function Home(){
 
             console.error(error);
 
-            toast.error(
-                (typeof error.response?.data === "object" ? (error.response?.data?.error || error.response?.data?.message || "Failed to join game") : error.response?.data) || "Failed to join game. Please check the Game ID and try again."
-            );
+            const message =
+                error.response?.data?.error ??
+                error.response?.data?.message ??
+                error.response?.data ??
+                error.message ??
+                "Failed to join game. Please check the Game ID and try again.";
+            toast.error(typeof message === "string" ? message : "Failed to join game");
 
         }
 
