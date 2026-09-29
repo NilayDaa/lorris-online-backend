@@ -56,11 +56,13 @@ public class ScoreService {
 
         }
 
-        // Match winner
+        // Match winner - restart round instead of finishing, scores persist
         if (game.getTeamAScore() >= 32) {
 
             game.setWinnerTeam("Team A");
-            game.setStatus(GameStatus.FINISHED);
+            game.setStatus(GameStatus.ROUND_FINISHED);
+            // Restart the round instead of finishing
+            nextRound(game);
             return;
 
         }
@@ -68,7 +70,9 @@ public class ScoreService {
         if (game.getTeamBScore() >= 32) {
 
             game.setWinnerTeam("Team B");
-            game.setStatus(GameStatus.FINISHED);
+            game.setStatus(GameStatus.ROUND_FINISHED);
+            // Restart the round instead of finishing
+            nextRound(game);
             return;
 
         }

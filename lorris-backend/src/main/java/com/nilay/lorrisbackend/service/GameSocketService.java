@@ -24,4 +24,14 @@ public class GameSocketService {
 
     }
 
+    // Live heartbeat for multiplayer - broadcasts current state immediately
+    public void sendLiveHeartbeat(Game game) {
+
+        messagingTemplate.convertAndSend(
+                "/topic/game/" + game.getGameId(),
+                new GameUpdate("HEARTBEAT", game)
+        );
+
+    }
+
 }

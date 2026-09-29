@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.nilay.lorrisbackend.model.Card;
@@ -285,6 +286,15 @@ public class GameService {
         return game;
     }
 
+    @Scheduled(fixedRate = 500)
+    public void liveBroadcastHeartbeat() {
+        for (Game game : games.values()) {
+            if (game.getStatus() == GameStatus.PLAYING || game.getStatus() == GameStatus.BIDDING) {
+                socketService.sendLiveHeartbeat(game);
+            }
+        }
+    }
+
     public Game nextRound(String gameId){
 
         Game game = games.get(gameId);
@@ -295,6 +305,13 @@ public class GameService {
                     "Game not found"
             );
 
+        }
+
+        if (game.getStatus() == GameStatus.FINISHED) {
+            // Game is finished, restart it for the next series
+            scoreService.nextRound(game);
+            socketService.sendGameUpdate(game);
+            return game;
         }
 
         if (game.getStatus() != GameStatus.ROUND_FINISHED) {

@@ -17,7 +17,7 @@ export default function RoundResult({ game }) {
 
     }
 
-    const matchFinished = game.status === "FINISHED";
+    const matchFinished = game.status === "FINISHED" && (game.teamAScore >= 32 || game.teamBScore >= 32);
 
     return (
 
@@ -91,7 +91,7 @@ export default function RoundResult({ game }) {
 
                     <div>
 
-                        <span>Score</span>
+                        <span>Score (First to 32)</span>
 
                         <strong>
 
